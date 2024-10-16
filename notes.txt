@@ -1,7 +1,0 @@
-1. Add constants file
-2. Use better error handling
-3. Add more comments
-4. Consider more edge cases -> e.g. empty file handling
-5. Make into a multi-thread
-6. lock down fields
-
