@@ -3,41 +3,54 @@ package fortunecookie;
 import java.util.ArrayList;
 import java.util.Random;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class Cookie {
     
+    // Cookie messages read from file will be saved in ArrayList
     private ArrayList<String> cookies;
 
     public Cookie() {
         this.cookies = new ArrayList<>();
     }
 
-    // read cookies from file
-    public void readFile(String filePath) throws FileNotFoundException, IOException {
+    // Read cookies from file
+    public void readFile(String filePath) {
 
-        BufferedReader br = new BufferedReader(new FileReader(filePath));
+        try (FileReader fr = new FileReader(filePath)) {
 
-        while (true) {
-            String cookie = br.readLine();
-            if (cookie == null) {
-                break;
+            BufferedReader br = new BufferedReader(fr);
+
+            while (true) {
+                // Read line by line from file
+                String cookie = br.readLine();
+
+                // Break the reading at end of file
+                if (cookie == null) {
+                    break;
+                }
+
+                // Add each line as a String to the ArrayList<String> cookies
+                cookies.add(cookie);
             }
-            cookies.add(cookie);
         }
 
-        br.close();
+        catch (IOException e) {
+            System.err.printf("An error occurred: %s\n", e.getMessage());
+        } 
     }
 
     // get Random Cookie
     public String getRandomCookie() {
-        Random rand = new Random();
-        // Get a random index of cookies
-        int randCookieIndex = rand.nextInt(cookies.size());
 
-        return cookies.get(randCookieIndex);
+        Random rand = new Random();
+
+        // Get a random index of cookies
+        int randCookie = rand.nextInt(cookies.size());
+
+        // Return a random cookie with index chosen
+        return cookies.get(randCookie);
     }
 
 }
