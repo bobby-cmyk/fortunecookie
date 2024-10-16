@@ -13,7 +13,7 @@ public class ClientMain {
         int port = Constants.PORT;
 
         // If port is provided in args
-        if (args.length > 1) {
+        if (args.length > 0) {
             port = Integer.parseInt(args[0]);
         }
 
@@ -50,6 +50,7 @@ public class ClientMain {
                 // Close scanner and socket
                 sock.close();
                 scan.close();
+                System.out.println(">>> Connection has ended\n");
                 break;
             }
             // Receive respone from server

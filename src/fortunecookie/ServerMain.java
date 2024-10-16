@@ -46,7 +46,7 @@ public class ServerMain {
             String clientCommand = sr.receive();
 
             if (clientCommand.equals(Constants.CLOSE)) {
-                System.out.println(">>> Connection has ended");
+                System.out.println(">>> Connection has ended\n");
                 server.close();
                 break;
             }

@@ -26,8 +26,14 @@ public class ClientReceiver {
             // Print out the fortune cookie reply between quotations
             System.out.printf("\"%s\"\n", serverResponse);
         }
-        catch (IOException e) {
-            System.err.printf("An error occured: %s\n", e.getMessage());
+        catch (IOException ie) {
+            System.err.printf("An error occured: %s\n", ie.getMessage());
+            try {
+                sock.close();
+            } 
+            catch (Exception e) {
+                System.err.printf("An error occured: %s\n", e.getMessage());
+            }
         }
     }
  }

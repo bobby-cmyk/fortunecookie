@@ -29,8 +29,15 @@ public class ClientSender {
             System.out.println("\n>>> Command sent to server\n");
         }
 
-        catch (IOException e) {
-            System.err.printf("An error occured: %s\n", e.getMessage());
+        catch (IOException ie) {
+            System.err.printf("An error occured: %s\n", ie.getMessage());
+            try {
+                sock.close();
+            } 
+            catch (Exception e) {
+                System.err.printf("An error occured: %s\n", e.getMessage());
+            }
+            
         }
     }
 }
