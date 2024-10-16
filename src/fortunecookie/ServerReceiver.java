@@ -15,15 +15,13 @@ public class ServerReceiver {
     }
 
     public String receive() {
-        System.out.println("print 1 pos");
-        try (InputStream is = this.sock.getInputStream()) {
-            System.out.println("print 2 pos");
+
+        try {
+            InputStream is = this.sock.getInputStream();
             BufferedInputStream bis = new BufferedInputStream(is);
-            System.out.println("print 3 pos");
             DataInputStream dis = new DataInputStream(bis);
-            System.out.println("print 4 pos");
+
             String clientCommand = dis.readUTF();
-            System.out.println("print 5 pos");
             
             // Return client command
             return clientCommand;  

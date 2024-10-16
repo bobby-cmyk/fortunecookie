@@ -17,7 +17,8 @@ public class ClientSender {
     }
 
     public void send(String command) {
-        try (OutputStream os = this.sock.getOutputStream()) {
+        try {
+            OutputStream os = this.sock.getOutputStream();
             BufferedOutputStream bos = new BufferedOutputStream(os);
             DataOutputStream dos = new DataOutputStream(bos);
 

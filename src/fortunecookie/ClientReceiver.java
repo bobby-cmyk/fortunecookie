@@ -7,8 +7,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 public class ClientReceiver {
-
-    // Why should this be final?
+    
     private final Socket sock;
 
     public ClientReceiver(Socket sock) {
@@ -16,13 +15,14 @@ public class ClientReceiver {
     }
 
     public void receive() {
-        try (InputStream is = this.sock.getInputStream()) {
+        try {
+            InputStream is = this.sock.getInputStream();
             BufferedInputStream bis = new BufferedInputStream(is);
             DataInputStream dis = new DataInputStream(bis);
 
             // Receive response from server
             String serverResponse = dis.readUTF();
-            
+
             // Print out the fortune cookie reply between quotations
             System.out.printf("\"%s\"\n", serverResponse);
         }

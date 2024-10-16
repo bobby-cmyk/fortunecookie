@@ -30,21 +30,20 @@ public class ServerMain {
         
         // Open a port to accept connection
         ServerSocket server = new ServerSocket(port);
+
+        Socket sock = server.accept();
+
+        // Will start running from here once connected
+        System.out.println(">>> New connection established");
        
         while (true) {
 
-            Socket sock = server.accept();
-
-             // Will start running from here once connected
-            System.out.println(">>> New connection established");
+            ServerReceiver sr = new ServerReceiver(sock);
 
             System.out.println("\n>>> Waiting for client's command\n");
 
-            ServerReceiver sr = new ServerReceiver(sock);
             // Receive client command from server receiver
-            String clientCommand = sr.receive(); 
-
-            System.out.println(clientCommand);
+            String clientCommand = sr.receive();
 
             if (clientCommand.equals(Constants.CLOSE)) {
                 System.out.println(">>> Connection has ended");
@@ -52,12 +51,9 @@ public class ServerMain {
                 break;
             }
 
-            System.out.println("Before server sender");
-
             ServerSender ss = new ServerSender(sock, cookieManager);
-            ss.send(clientCommand);
 
-            System.out.println("After server sender");
+            ss.sendCookie();
         }
 
         
