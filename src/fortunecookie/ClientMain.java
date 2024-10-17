@@ -1,6 +1,13 @@
 package fortunecookie;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInput;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
@@ -16,47 +23,51 @@ public class ClientMain {
         if (args.length > 0) {
             port = Integer.parseInt(args[0]);
         }
-
         // Try to connect to server on port
         Socket sock = new Socket("localhost", port );
 
-        // Instantiate scanner to receive input from user
-        Scanner scan = new Scanner(System.in);
-
         // Continuously receive input from user
+        System.out.println("Connected!");
+
+        OutputStream os = sock.getOutputStream();
+        BufferedOutputStream bos = new BufferedOutputStream(os);
+        DataOutputStream dos = new DataOutputStream(bos);
+
+        InputStream is = sock.getInputStream();
+        BufferedInputStream bis = new BufferedInputStream(is);
+        DataInputStream dis = new DataInputStream(bis);
+
+        Scanner scanner = new Scanner(System.in);
+
         while (true) {
 
-            // Receive command to either get cookie or close server
-            System.out.printf("\nCommand (%s/%s): ", Constants.GET_COOKIE, Constants.CLOSE);
-            
-            String command = scan.nextLine().trim().toLowerCase();
+            System.out.print("get-cookie / close: ");
 
-            // If command is not get-cookie nor close OR is blank
-            if ((!command.equals(Constants.GET_COOKIE) && 
-                !command.equals(Constants.CLOSE)) || 
-                command.isBlank())
-            {
-                System.out.println("\nCommand does not exist!");
-                // Get user to provide a new command
-                continue;
-            }
-            
-            // Send user command to server
-            ClientSender cs = new ClientSender(sock);
-            cs.send(command);
+            String clientCommand = scanner.nextLine();
 
-            // If command sent is "close", end client
-            if (command.equals(Constants.CLOSE)) {
-                // Close scanner and socket
-                sock.close();
-                scan.close();
-                System.out.println(">>> Connection has ended\n");
+            dos.writeUTF(clientCommand); 
+
+            dos.flush();
+
+            if (clientCommand.equals("close")) {
                 break;
             }
-            // Receive respone from server
-            ClientReceiver cr = new ClientReceiver(sock);
-            cr.receive();
+
+            String cookieResponse = dis.readUTF();
+
+            System.out.println(cookieResponse);
+
         }
-        
+        scanner.close();
+
+        dos.close();
+        bos.close();
+        os.close();
+
+        dis.close();
+        bis.close();
+        is.close();
+
+        sock.close();
     }
 }
